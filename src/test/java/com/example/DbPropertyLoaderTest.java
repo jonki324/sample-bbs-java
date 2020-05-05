@@ -17,7 +17,7 @@ public class DbPropertyLoaderTest {
 	
 	@Test
 	public void getUrlTest() {
-		String expected = "jdbc:postgresql://localhost:5432/bernie_eats";
+		String expected = "jdbc:postgresql://localhost:5432/sample_bbs";
 		String actual = DbPropertyLoader.getUrl();
 		assertEquals(expected, actual);
 	}
