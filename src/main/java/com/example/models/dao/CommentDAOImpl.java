@@ -101,4 +101,23 @@ public class CommentDAOImpl extends BaseDAO implements CommentDAO {
 		}
 		return result;
 	}
+
+	private static final String FETCH_BY_TOPIC_ID = "fetchByTopicIdComments";
+	
+	@Override
+	public List<CommentDTO> fetchByTopicId(Integer topicId) {
+		List<CommentDTO> list = new ArrayList<CommentDTO>();
+		String sql = QueryPropertyLoader.getQuery(FETCH_BY_TOPIC_ID);
+		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+			ps.setInt(1, topicId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				CommentDTO dto = CommentDXO.convert(rs);
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			throw new AppException("SQLエラー: " + FETCH_BY_TOPIC_ID, e);
+		}
+		return list;
+	}
 }
