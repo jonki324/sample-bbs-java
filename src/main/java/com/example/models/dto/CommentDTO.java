@@ -30,7 +30,7 @@ public class CommentDTO extends BaseDTO {
 		return contents;
 	}
 
-	public void setName(String contents) {
+	public void setContents(String contents) {
 		this.contents = contents;
 	}
 }

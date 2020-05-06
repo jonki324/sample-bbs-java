@@ -9,26 +9,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.exceptions.AppException;
-import com.example.models.dto.TopicDTO;
-import com.example.models.dxo.TopicDXO;
+import com.example.models.dto.CommentDTO;
+import com.example.models.dxo.CommentDXO;
 
-public class TopicDAOImpl extends BaseDAO implements TopicDAO {
+public class CommentDAOImpl extends BaseDAO implements CommentDAO {
 
-	public TopicDAOImpl(Connection connection) {
+	public CommentDAOImpl(Connection connection) {
 		super(connection);
 	}
 
-	private static final String FETCH_BY_ID = "fetchByIdTopics";
+	private static final String FETCH_BY_ID = "fetchByIdComments";
 	
 	@Override
-	public TopicDTO fetchById(Integer id) {
-		TopicDTO dto = null;
+	public CommentDTO fetchById(Integer id) {
+		CommentDTO dto = null;
 		String sql = QueryPropertyLoader.getQuery(FETCH_BY_ID);
 		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				dto = TopicDXO.convert(rs);
+				dto = CommentDXO.convert(rs);
 			}
 		} catch (SQLException e) {
 			throw new AppException("SQLエラー: " + FETCH_BY_ID, e);
@@ -36,16 +36,16 @@ public class TopicDAOImpl extends BaseDAO implements TopicDAO {
 		return dto;
 	}
 
-	private static final String FETCH_ALL = "fetchAllTopics";
+	private static final String FETCH_ALL = "fetchAllComments";
 	
 	@Override
-	public List<TopicDTO> fetchAll() {
-		List<TopicDTO> list = new ArrayList<TopicDTO>();
+	public List<CommentDTO> fetchAll() {
+		List<CommentDTO> list = new ArrayList<CommentDTO>();
 		String sql = QueryPropertyLoader.getQuery(FETCH_ALL);
 		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				TopicDTO dto = TopicDXO.convert(rs);
+				CommentDTO dto = CommentDXO.convert(rs);
 				list.add(dto);
 			}
 		} catch (SQLException e) {
@@ -54,14 +54,15 @@ public class TopicDAOImpl extends BaseDAO implements TopicDAO {
 		return list;
 	}
 
-	private static final String INSERT = "insertTopics";
+	private static final String INSERT = "insertComments";
 	
 	@Override
-	public int insert(TopicDTO dto) {
+	public int insert(CommentDTO dto) {
 		int result = -1;
 		String sql = QueryPropertyLoader.getQuery(INSERT);
 		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-			ps.setString(1, dto.getName());
+			ps.setInt(1, dto.getTopicId());
+			ps.setString(2, dto.getContents());
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new AppException("SQLエラー: " + INSERT, e);
@@ -69,14 +70,14 @@ public class TopicDAOImpl extends BaseDAO implements TopicDAO {
 		return result;
 	}
 
-	private static final String UPDATE = "updateTopics";
+	private static final String UPDATE = "updateComments";
 	
 	@Override
-	public int update(TopicDTO dto) {
+	public int update(CommentDTO dto) {
 		int result = -1;
 		String sql = QueryPropertyLoader.getQuery(UPDATE);
 		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-			ps.setString(1, dto.getName());
+			ps.setString(1, dto.getContents());
 			ps.setTimestamp(2, Timestamp.valueOf(dto.getModified()));
 			ps.setInt(3, dto.getId());
 			result = ps.executeUpdate();
@@ -86,7 +87,7 @@ public class TopicDAOImpl extends BaseDAO implements TopicDAO {
 		return result;
 	}
 
-	private static final String DELETE = "deleteTopics";
+	private static final String DELETE = "deleteComments";
 	
 	@Override
 	public int delete(Integer id) {
