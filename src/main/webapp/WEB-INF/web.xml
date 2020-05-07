@@ -5,23 +5,13 @@
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
   <servlet>
-  	<servlet-name>IndexServlet</servlet-name>
-  	<display-name>IndexServlet</display-name>
-  	<description></description>
-  	<servlet-class>com.example.IndexServlet</servlet-class>
-  </servlet>
-  <servlet>
   	<servlet-name>FrontController</servlet-name>
   	<display-name>FrontController</display-name>
   	<description></description>
   	<servlet-class>com.example.controllers.FrontController</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>IndexServlet</servlet-name>
-  	<url-pattern>/index</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
   	<servlet-name>FrontController</servlet-name>
-  	<url-pattern>/bbs</url-pattern>
+  	<url-pattern>/*</url-pattern>
   </servlet-mapping>
 </web-app>
